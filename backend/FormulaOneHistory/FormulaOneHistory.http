@@ -1,0 +1,6 @@
+@FormulaOneHistory_HostAddress = http://localhost:5143
+
+GET {{FormulaOneHistory_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
