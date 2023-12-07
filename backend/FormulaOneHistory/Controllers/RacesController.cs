@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FormulaOneHistory.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/races")]
 public class RacesController(FormulaOneHistoryDbContext context, RaceImportService raceImportService)
     : ControllerBase
 {

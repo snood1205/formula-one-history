@@ -3,6 +3,7 @@ using System;
 using FormulaOneHistory.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FormulaOneHistory.Migrations
 {
     [DbContext(typeof(FormulaOneHistoryDbContext))]
-    partial class FormulaOneHistoryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231205203129_AddNullability")]
+    partial class AddNullability
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

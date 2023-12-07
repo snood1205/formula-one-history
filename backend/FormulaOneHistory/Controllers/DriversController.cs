@@ -7,38 +7,30 @@ using Microsoft.EntityFrameworkCore;
 namespace FormulaOneHistory.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class DriversController : ControllerBase
+[Route("api/drivers")]
+public class DriversController(FormulaOneHistoryDbContext context, DriverImportService driverImportService)
+    : ControllerBase
 {
-    private readonly FormulaOneHistoryDbContext _context;
-    private readonly DriverImportService _driverImportService;
-
-    public DriversController(FormulaOneHistoryDbContext context, DriverImportService driverImportService)
-    {
-        _context = context;
-        _driverImportService = driverImportService;
-    }
-
     [HttpGet]
     public async Task<ActionResult<List<Driver>>> GetDrivers()
     {
-        var drivers = await _context.Drivers.ToListAsync();
+        var drivers = await context.Drivers.ToListAsync();
         return Ok(drivers);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Driver>> GetDriver(int id)
     {
-        var driver = await _context.Drivers.FindAsync(id);
+        var driver = await context.Drivers.FindAsync(id);
         if (HttpContext.Request.Query["skip_seasons"] == "true")
         {
             return Ok(driver);
         }
 
         var seasonBySeason =
-            from result in _context.RaceResults
+            from result in context.RaceResults
             where result.DriverId == id
-            join race in _context.Races on result.RaceId equals race.RaceId
+            join race in context.Races on result.RaceId equals race.RaceId
             select new { Race = race, Result = result }
             into racesWithResults
             group racesWithResults by racesWithResults.Race.Year
@@ -65,10 +57,10 @@ public class DriversController : ControllerBase
             SeasonBySeason = seasonBySeason
         });
     }
-    
+
     [HttpGet("import")]
     public async Task<ActionResult<List<Driver>>> ImportDrivers()
     {
-        return Ok(await _driverImportService.Import());
+        return Ok(await driverImportService.Import());
     }
 }

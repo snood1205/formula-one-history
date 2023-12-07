@@ -13,14 +13,13 @@ builder.Services.AddDbContext<FormulaOneHistoryDbContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy", corsPolicyBuilder =>
-    {
-        corsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-    });
+    options.AddPolicy("CorsPolicy",
+        corsPolicyBuilder => { corsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); });
 });
 // Add import services to the container.
 builder.Services.AddScoped<DriverImportService>();
 builder.Services.AddScoped<RaceImportService>();
+builder.Services.AddScoped<RaceResultImportService>();
 builder.Services.AddScoped<TeamImportService>();
 
 var app = builder.Build();

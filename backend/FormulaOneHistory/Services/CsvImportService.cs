@@ -14,7 +14,7 @@ public abstract class CsvImportService<T> where T : class
         FilePath = filePath;
     }
 
-    public async Task<List<T>> Import()
+    protected virtual List<T> ParseData()
     {
         var file = File.Open(FilePath, FileMode.Open);
         var entities = new List<T>();
@@ -32,6 +32,15 @@ public abstract class CsvImportService<T> where T : class
             entities.Add(CreateEntityFromRow(rowDict));
         }
 
+        return entities;
+    }
+    
+    public virtual async Task<List<T>> Import(bool insertData = true)
+    {
+        var entities = ParseData();
+
+        if (!insertData) return entities;
+
         var dbSet = _context.Set<T>();
         await dbSet.AddRangeAsync(entities);
         var rowsSaved = await _context.SaveChangesAsync();
@@ -42,6 +51,7 @@ public abstract class CsvImportService<T> where T : class
 
         return entities;
     }
+
 
     protected abstract T CreateEntityFromRow(IReadOnlyDictionary<string, string> rowDict);
 }
